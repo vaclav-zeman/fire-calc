@@ -13,6 +13,7 @@ function Input(Props) {
   var name = Props.name;
   var value = Props.value;
   return React.createElement("input", {
+              className: "input",
               value: value,
               onChange: (function (e) {
                   return Curry._2(onChange, name, e.target.value);

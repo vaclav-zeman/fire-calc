@@ -6,10 +6,6 @@ var React = require("react");
 var Input$ReactHooksTemplate = require("./Input.bs.js");
 var Label$ReactHooksTemplate = require("./Label.bs.js");
 
-function getValue(e) {
-  return e.target.value;
-}
-
 function updateFormState(state, field, value) {
   switch (field) {
     case 0 : 
@@ -55,32 +51,36 @@ function Calc(Props) {
     console.log(state);
     return /* () */0;
   };
-  return React.createElement("form", {
-              onSubmit: handleSubmit
-            }, "FIRE Calculator", React.createElement(Label$ReactHooksTemplate.make, {
-                  children: null
-                }, "Income", React.createElement(Input$ReactHooksTemplate.make, {
-                      onChange: handleChange,
-                      name: /* Income */0,
-                      value: state[/* income */0]
-                    })), React.createElement(Label$ReactHooksTemplate.make, {
-                  children: null
-                }, "Spending", React.createElement(Input$ReactHooksTemplate.make, {
-                      onChange: handleChange,
-                      name: /* Spending */1,
-                      value: state[/* spending */1]
-                    })), React.createElement(Label$ReactHooksTemplate.make, {
-                  children: null
-                }, "Years", React.createElement(Input$ReactHooksTemplate.make, {
-                      onChange: handleChange,
-                      name: /* Years */2,
-                      value: state[/* years */2]
-                    })), React.createElement("button", undefined, "Calculate"));
+  return React.createElement("section", {
+              className: "container"
+            }, React.createElement("form", {
+                  className: " section",
+                  onSubmit: handleSubmit
+                }, React.createElement("h1", {
+                      className: "title"
+                    }, "FIRE Calculator"), React.createElement(Label$ReactHooksTemplate.make, {
+                      children: null
+                    }, "Income", React.createElement(Input$ReactHooksTemplate.make, {
+                          onChange: handleChange,
+                          name: /* Income */0,
+                          value: state[/* income */0]
+                        })), React.createElement(Label$ReactHooksTemplate.make, {
+                      children: null
+                    }, "Spending", React.createElement(Input$ReactHooksTemplate.make, {
+                          onChange: handleChange,
+                          name: /* Spending */1,
+                          value: state[/* spending */1]
+                        })), React.createElement(Label$ReactHooksTemplate.make, {
+                      children: null
+                    }, "Years", React.createElement(Input$ReactHooksTemplate.make, {
+                          onChange: handleChange,
+                          name: /* Years */2,
+                          value: state[/* years */2]
+                        })), React.createElement("button", undefined, "Calculate")));
 }
 
 var make = Calc;
 
-exports.getValue = getValue;
 exports.updateFormState = updateFormState;
 exports.make = make;
 /* react Not a pure module */

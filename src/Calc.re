@@ -12,8 +12,6 @@ type state = {
   years: string,
 };
 
-let getValue = e => ReactEvent.Form.target(e)##value;
-
 let updateFormState = (state: state, field: fields, value: string) =>
   switch (field) {
   | Income => {...state, income: value}
@@ -38,20 +36,22 @@ let make = () => {
     Js.log(state);
   };
 
-  <form onSubmit=handleSubmit>
-    {"FIRE Calculator" |> ReasonReact.string}
-    <Label>
-      {"Income" |> ReasonReact.string}
-      <Input onChange=handleChange name=Income value={state.income} />
-    </Label>
-    <Label>
-      {"Spending" |> ReasonReact.string}
-      <Input onChange=handleChange name=Spending value={state.spending} />
-    </Label>
-    <Label>
-      {"Years" |> ReasonReact.string}
-      <Input onChange=handleChange name=Years value={state.years} />
-    </Label>
-    <button> {"Calculate" |> ReasonReact.string} </button>
-  </form>;
+  <section className="container">
+    <form className=" section" onSubmit=handleSubmit>
+      <h1 className="title"> {"FIRE Calculator" |> ReasonReact.string} </h1>
+      <Label>
+        {"Income" |> ReasonReact.string}
+        <Input onChange=handleChange name=Income value={state.income} />
+      </Label>
+      <Label>
+        {"Spending" |> ReasonReact.string}
+        <Input onChange=handleChange name=Spending value={state.spending} />
+      </Label>
+      <Label>
+        {"Years" |> ReasonReact.string}
+        <Input onChange=handleChange name=Years value={state.years} />
+      </Label>
+      <button> {"Calculate" |> ReasonReact.string} </button>
+    </form>
+  </section>;
 };
