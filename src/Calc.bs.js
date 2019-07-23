@@ -3,6 +3,7 @@
 
 var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
+var Input$ReactHooksTemplate = require("./Input.bs.js");
 var Label$ReactHooksTemplate = require("./Label.bs.js");
 
 function getValue(e) {
@@ -43,39 +44,37 @@ function Calc(Props) {
       ]);
   var dispatch = match[1];
   var state = match[0];
-  return React.createElement("form", undefined, "FIRE Calculator", React.createElement(Label$ReactHooksTemplate.make, {
+  var handleChange = function (name, value) {
+    return Curry._1(dispatch, /* InputChange */[
+                name,
+                value
+              ]);
+  };
+  var handleSubmit = function (e) {
+    e.preventDefault();
+    console.log(state);
+    return /* () */0;
+  };
+  return React.createElement("form", {
+              onSubmit: handleSubmit
+            }, "FIRE Calculator", React.createElement(Label$ReactHooksTemplate.make, {
                   children: null
-                }, "Income", React.createElement("input", {
-                      value: state[/* income */0],
-                      onChange: (function (e) {
-                          var value = e.target.value;
-                          return Curry._1(dispatch, /* InputChange */[
-                                      /* Income */0,
-                                      value
-                                    ]);
-                        })
+                }, "Income", React.createElement(Input$ReactHooksTemplate.make, {
+                      onChange: handleChange,
+                      name: /* Income */0,
+                      value: state[/* income */0]
                     })), React.createElement(Label$ReactHooksTemplate.make, {
                   children: null
-                }, "Spending", React.createElement("input", {
-                      value: state[/* spending */1],
-                      onChange: (function (e) {
-                          var value = e.target.value;
-                          return Curry._1(dispatch, /* InputChange */[
-                                      /* Spending */1,
-                                      value
-                                    ]);
-                        })
+                }, "Spending", React.createElement(Input$ReactHooksTemplate.make, {
+                      onChange: handleChange,
+                      name: /* Spending */1,
+                      value: state[/* spending */1]
                     })), React.createElement(Label$ReactHooksTemplate.make, {
                   children: null
-                }, "Years", React.createElement("input", {
-                      value: state[/* years */2],
-                      onChange: (function (e) {
-                          var value = e.target.value;
-                          return Curry._1(dispatch, /* InputChange */[
-                                      /* Years */2,
-                                      value
-                                    ]);
-                        })
+                }, "Years", React.createElement(Input$ReactHooksTemplate.make, {
+                      onChange: handleChange,
+                      name: /* Years */2,
+                      value: state[/* years */2]
                     })), React.createElement("button", undefined, "Calculate"));
 }
 

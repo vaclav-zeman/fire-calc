@@ -33,29 +33,24 @@ let make = () => {
     );
 
   let handleChange = (name, value) => InputChange(name, value) |> dispatch;
+  let handleSubmit = e => {
+    ReactEvent.Synthetic.preventDefault(e);
+    Js.log(state);
+  };
 
-  <form>
+  <form onSubmit=handleSubmit>
     {"FIRE Calculator" |> ReasonReact.string}
     <Label>
       {"Income" |> ReasonReact.string}
-      <input
-        onChange={e => getValue(e) |> handleChange(Income)}
-        value={state.income}
-      />
+      <Input onChange=handleChange name=Income value={state.income} />
     </Label>
     <Label>
       {"Spending" |> ReasonReact.string}
-      <input
-        onChange={e => getValue(e) |> handleChange(Spending)}
-        value={state.spending}
-      />
+      <Input onChange=handleChange name=Spending value={state.spending} />
     </Label>
     <Label>
       {"Years" |> ReasonReact.string}
-      <input
-        onChange={e => getValue(e) |> handleChange(Years)}
-        value={state.years}
-      />
+      <Input onChange=handleChange name=Years value={state.years} />
     </Label>
     <button> {"Calculate" |> ReasonReact.string} </button>
   </form>;

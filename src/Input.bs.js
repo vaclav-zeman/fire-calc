@@ -8,11 +8,15 @@ function getValue(e) {
   return e.target.value;
 }
 
-function Input(Props, name, onChange, value) {
+function Input(Props) {
+  var onChange = Props.onChange;
+  var name = Props.name;
+  var value = Props.value;
   return React.createElement("input", {
-              name: name,
               value: value,
-              onChange: Curry._2(onChange, name, getValue)
+              onChange: (function (e) {
+                  return Curry._2(onChange, name, e.target.value);
+                })
             });
 }
 
