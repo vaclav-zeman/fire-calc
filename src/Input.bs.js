@@ -10,11 +10,16 @@ function getValue(e) {
 
 function Input(Props) {
   var onChange = Props.onChange;
+  var onBlur = Props.onBlur;
   var name = Props.name;
   var value = Props.value;
   return React.createElement("input", {
               className: "input",
               value: value,
+              onBlur: onBlur !== undefined ? Curry._1(onBlur, name) : (function (prim) {
+                    console.log(prim);
+                    return /* () */0;
+                  }),
               onChange: (function (e) {
                   return Curry._2(onChange, name, e.target.value);
                 })
