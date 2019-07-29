@@ -64,6 +64,8 @@ let reducer = (state, action) =>
           *. 12.0,
       );
     let targetAmount = float_of_string(state.spending) *. 25.0;
+    let targetYear =
+      Finance.getFIREYear(~amounts=compoundInterest, ~targetAmount);
 
     {
       ...state,
@@ -80,8 +82,10 @@ let reducer = (state, action) =>
             *. 12.0,
         ),
       targetYear:
-        Finance.getFIREYear(~amounts=compoundInterest, ~targetAmount)
-        |> string_of_int,
+        switch (targetYear) {
+        | Some(year) => year |> string_of_int
+        | None => "Not in range"
+        },
     };
   };
 

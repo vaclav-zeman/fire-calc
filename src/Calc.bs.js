@@ -73,6 +73,7 @@ function reducer(state, action) {
     } else {
       var compoundInterest = Finance$ReactHooksTemplate.compoundInterest(7.0, Caml_format.caml_float_of_string(state[/* currBalance */3]), Finance$ReactHooksTemplate.savings(Caml_format.caml_float_of_string(state[/* income */0]), Caml_format.caml_float_of_string(state[/* spending */1])) * 12.0);
       var targetAmount = Caml_format.caml_float_of_string(state[/* spending */1]) * 25.0;
+      var targetYear = Finance$ReactHooksTemplate.getFIREYear(compoundInterest, targetAmount);
       return /* record */[
               /* income */state[/* income */0],
               /* spending */state[/* spending */1],
@@ -80,7 +81,7 @@ function reducer(state, action) {
               /* currBalance */state[/* currBalance */3],
               /* targetAmount */targetAmount.toString(),
               /* savingsRate */state[/* savingsRate */5],
-              /* targetYear */String(Finance$ReactHooksTemplate.getFIREYear(compoundInterest, targetAmount))
+              /* targetYear */targetYear !== undefined ? String(targetYear) : "Not in range"
             ];
     }
   } else {

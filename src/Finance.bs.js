@@ -2,6 +2,7 @@
 'use strict';
 
 var List = require("bs-platform/lib/js/list.js");
+var Caml_obj = require("bs-platform/lib/js/caml_obj.js");
 var Belt_List = require("bs-platform/lib/js/belt_List.js");
 var Belt_Array = require("bs-platform/lib/js/belt_Array.js");
 
@@ -21,8 +22,21 @@ function compoundInterest(rate, principal, yearlySavings) {
               }), /* [] */0, yearsArray);
 }
 
-function getFIREYear(amounts, targetAmount, index) {
-  return 2;
+function getFIREYear(amounts, targetAmount) {
+  var amountsLength = List.length(amounts) - 1 | 0;
+  var _$staropt$star = 0;
+  while(true) {
+    var $staropt$star = _$staropt$star;
+    var index = $staropt$star !== undefined ? $staropt$star : 0;
+    if (amountsLength === index) {
+      return undefined;
+    } else if (Caml_obj.caml_greaterequal(List.nth(amounts, index), targetAmount)) {
+      return index + 1 | 0;
+    } else {
+      _$staropt$star = index + 1 | 0;
+      continue ;
+    }
+  };
 }
 
 function savings(income, spending) {

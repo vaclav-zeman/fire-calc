@@ -27,8 +27,18 @@ let compoundInterest = (~rate, ~principal, ~yearlySavings) => {
   );
 };
 
-let getFIREYear = (~amounts, ~targetAmount, ~index) => {
-  2;
+let getFIREYear = (~amounts, ~targetAmount) => {
+  let amountsLength = List.length(amounts) - 1;
+  let rec calculate = (~index=0) =>
+    if (amountsLength === index) {
+      None;
+    } else if (List.nth(amounts, index) >= targetAmount) {
+      Some(index + 1);
+    } else {
+      calculate(~index=index + 1);
+    };
+
+  calculate(~index=0);
 };
 
 let savings = (~income, ~spending) => income -. spending;
