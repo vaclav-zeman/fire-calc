@@ -12,23 +12,25 @@ type action =
 
 type state = {
   annualReturn: string,
-  income: string,
-  spending: string,
   compoundInterest: list(float),
   currBalance: string,
-  targetAmount: string,
+  hasSubmitted: bool,
+  income: string,
   savingsRate: string,
+  spending: string,
+  targetAmount: string,
   targetYear: string,
 };
 
 let initialState = {
   annualReturn: "7",
-  income: "30000",
-  spending: "10000",
-  currBalance: "0",
   compoundInterest: [],
-  targetAmount: "",
+  currBalance: "0",
+  hasSubmitted: false,
+  income: "30000",
   savingsRate: "67%",
+  spending: "10000",
+  targetAmount: "",
   targetYear: "",
 };
 
@@ -75,6 +77,7 @@ let reducer = (state, action) =>
 
     {
       ...state,
+      hasSubmitted: true,
       targetAmount: targetAmount |> Js.Float.toString,
       compoundInterest,
       targetYear:
@@ -147,7 +150,14 @@ let make = () => {
         {"Calculate" |> ReasonReact.string}
       </button>
     </form>
-    <Result targetAmount={state.targetAmount} targetYear={state.targetYear} />
-    <Table data={state.compoundInterest} />
+    {state.hasSubmitted === true
+       ? <>
+           <Result
+             targetAmount={state.targetAmount}
+             targetYear={state.targetYear}
+           />
+           <Table data={state.compoundInterest} />
+         </>
+       : ReasonReact.null}
   </main>;
 };

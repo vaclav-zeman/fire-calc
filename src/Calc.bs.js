@@ -12,12 +12,13 @@ var Finance$ReactHooksTemplate = require("./Finance.bs.js");
 
 var initialState = /* record */[
   /* annualReturn */"7",
-  /* income */"30000",
-  /* spending */"10000",
   /* compoundInterest : [] */0,
   /* currBalance */"0",
-  /* targetAmount */"",
+  /* hasSubmitted */false,
+  /* income */"30000",
   /* savingsRate */"67%",
+  /* spending */"10000",
+  /* targetAmount */"",
   /* targetYear */""
 ];
 
@@ -26,48 +27,52 @@ function updateFormState(state, field, value) {
     case 0 : 
         return /* record */[
                 /* annualReturn */value,
-                /* income */state[/* income */1],
-                /* spending */state[/* spending */2],
-                /* compoundInterest */state[/* compoundInterest */3],
-                /* currBalance */state[/* currBalance */4],
-                /* targetAmount */state[/* targetAmount */5],
-                /* savingsRate */state[/* savingsRate */6],
-                /* targetYear */state[/* targetYear */7]
+                /* compoundInterest */state[/* compoundInterest */1],
+                /* currBalance */state[/* currBalance */2],
+                /* hasSubmitted */state[/* hasSubmitted */3],
+                /* income */state[/* income */4],
+                /* savingsRate */state[/* savingsRate */5],
+                /* spending */state[/* spending */6],
+                /* targetAmount */state[/* targetAmount */7],
+                /* targetYear */state[/* targetYear */8]
               ];
     case 1 : 
         return /* record */[
                 /* annualReturn */state[/* annualReturn */0],
-                /* income */state[/* income */1],
-                /* spending */state[/* spending */2],
-                /* compoundInterest */state[/* compoundInterest */3],
+                /* compoundInterest */state[/* compoundInterest */1],
                 /* currBalance */value,
-                /* targetAmount */state[/* targetAmount */5],
-                /* savingsRate */state[/* savingsRate */6],
-                /* targetYear */state[/* targetYear */7]
+                /* hasSubmitted */state[/* hasSubmitted */3],
+                /* income */state[/* income */4],
+                /* savingsRate */state[/* savingsRate */5],
+                /* spending */state[/* spending */6],
+                /* targetAmount */state[/* targetAmount */7],
+                /* targetYear */state[/* targetYear */8]
               ];
     case 2 : 
         return /* record */[
                 /* annualReturn */state[/* annualReturn */0],
+                /* compoundInterest */state[/* compoundInterest */1],
+                /* currBalance */state[/* currBalance */2],
+                /* hasSubmitted */state[/* hasSubmitted */3],
                 /* income */value,
-                /* spending */state[/* spending */2],
-                /* compoundInterest */state[/* compoundInterest */3],
-                /* currBalance */state[/* currBalance */4],
-                /* targetAmount */state[/* targetAmount */5],
-                /* savingsRate */state[/* savingsRate */6],
-                /* targetYear */state[/* targetYear */7]
+                /* savingsRate */state[/* savingsRate */5],
+                /* spending */state[/* spending */6],
+                /* targetAmount */state[/* targetAmount */7],
+                /* targetYear */state[/* targetYear */8]
               ];
     case 3 : 
         return state;
     case 4 : 
         return /* record */[
                 /* annualReturn */state[/* annualReturn */0],
-                /* income */state[/* income */1],
+                /* compoundInterest */state[/* compoundInterest */1],
+                /* currBalance */state[/* currBalance */2],
+                /* hasSubmitted */state[/* hasSubmitted */3],
+                /* income */state[/* income */4],
+                /* savingsRate */state[/* savingsRate */5],
                 /* spending */value,
-                /* compoundInterest */state[/* compoundInterest */3],
-                /* currBalance */state[/* currBalance */4],
-                /* targetAmount */state[/* targetAmount */5],
-                /* savingsRate */state[/* savingsRate */6],
-                /* targetYear */state[/* targetYear */7]
+                /* targetAmount */state[/* targetAmount */7],
+                /* targetYear */state[/* targetYear */8]
               ];
     
   }
@@ -78,27 +83,29 @@ function reducer(state, action) {
     if (action !== 0) {
       return /* record */[
               /* annualReturn */state[/* annualReturn */0],
-              /* income */state[/* income */1],
-              /* spending */state[/* spending */2],
-              /* compoundInterest */state[/* compoundInterest */3],
-              /* currBalance */state[/* currBalance */4],
-              /* targetAmount */state[/* targetAmount */5],
-              /* savingsRate */Finance$ReactHooksTemplate.savingsRate(Caml_format.caml_float_of_string(state[/* income */1]), Caml_format.caml_float_of_string(state[/* spending */2])).toString() + "%",
-              /* targetYear */state[/* targetYear */7]
+              /* compoundInterest */state[/* compoundInterest */1],
+              /* currBalance */state[/* currBalance */2],
+              /* hasSubmitted */state[/* hasSubmitted */3],
+              /* income */state[/* income */4],
+              /* savingsRate */Finance$ReactHooksTemplate.savingsRate(Caml_format.caml_float_of_string(state[/* income */4]), Caml_format.caml_float_of_string(state[/* spending */6])).toString() + "%",
+              /* spending */state[/* spending */6],
+              /* targetAmount */state[/* targetAmount */7],
+              /* targetYear */state[/* targetYear */8]
             ];
     } else {
-      var yearlySavings = Finance$ReactHooksTemplate.savings(Caml_format.caml_float_of_string(state[/* income */1]), Caml_format.caml_float_of_string(state[/* spending */2])) * 12.0;
-      var compoundInterest = Finance$ReactHooksTemplate.compoundInterest(Caml_format.caml_float_of_string(state[/* annualReturn */0]), Caml_format.caml_float_of_string(state[/* currBalance */4]), yearlySavings);
-      var targetAmount = Caml_format.caml_float_of_string(state[/* spending */2]) * 12.0 * 25.0;
+      var yearlySavings = Finance$ReactHooksTemplate.savings(Caml_format.caml_float_of_string(state[/* income */4]), Caml_format.caml_float_of_string(state[/* spending */6])) * 12.0;
+      var compoundInterest = Finance$ReactHooksTemplate.compoundInterest(Caml_format.caml_float_of_string(state[/* annualReturn */0]), Caml_format.caml_float_of_string(state[/* currBalance */2]), yearlySavings);
+      var targetAmount = Caml_format.caml_float_of_string(state[/* spending */6]) * 12.0 * 25.0;
       var targetYear = Finance$ReactHooksTemplate.getFIREYear(compoundInterest, targetAmount);
       return /* record */[
               /* annualReturn */state[/* annualReturn */0],
-              /* income */state[/* income */1],
-              /* spending */state[/* spending */2],
               /* compoundInterest */compoundInterest,
-              /* currBalance */state[/* currBalance */4],
+              /* currBalance */state[/* currBalance */2],
+              /* hasSubmitted */true,
+              /* income */state[/* income */4],
+              /* savingsRate */state[/* savingsRate */5],
+              /* spending */state[/* spending */6],
               /* targetAmount */targetAmount.toString(),
-              /* savingsRate */state[/* savingsRate */6],
               /* targetYear */targetYear !== undefined ? String(targetYear) : "Not in range"
             ];
     }
@@ -124,6 +131,7 @@ function Calc(Props) {
     e.preventDefault();
     return Curry._1(dispatch, /* Submit */0);
   };
+  var match$1 = state[/* hasSubmitted */3] === true;
   return React.createElement("main", {
               className: "container"
             }, React.createElement("form", {
@@ -137,27 +145,27 @@ function Calc(Props) {
                           onChange: handleChange,
                           onBlur: handleBlur,
                           name: /* CurrentBalance */1,
-                          value: state[/* currBalance */4]
+                          value: state[/* currBalance */2]
                         })), React.createElement(Label$ReactHooksTemplate.make, {
                       children: null
                     }, "Income (monthly)", React.createElement(Input$ReactHooksTemplate.make, {
                           onChange: handleChange,
                           onBlur: handleBlur,
                           name: /* Income */2,
-                          value: state[/* income */1]
+                          value: state[/* income */4]
                         })), React.createElement(Label$ReactHooksTemplate.make, {
                       children: null
                     }, "Spending (monthly)", React.createElement(Input$ReactHooksTemplate.make, {
                           onChange: handleChange,
                           onBlur: handleBlur,
                           name: /* Spending */4,
-                          value: state[/* spending */2]
+                          value: state[/* spending */6]
                         })), React.createElement(Label$ReactHooksTemplate.make, {
                       children: null
                     }, "Savings rate", React.createElement(Input$ReactHooksTemplate.make, {
                           onChange: handleChange,
                           name: /* SavingsRate */3,
-                          value: state[/* savingsRate */6]
+                          value: state[/* savingsRate */5]
                         })), React.createElement(Label$ReactHooksTemplate.make, {
                       children: null
                     }, "Expected annual return (%)", React.createElement(Input$ReactHooksTemplate.make, {
@@ -167,12 +175,12 @@ function Calc(Props) {
                           value: state[/* annualReturn */0]
                         })), React.createElement("button", {
                       className: "button is-primary"
-                    }, "Calculate")), React.createElement(Result$ReactHooksTemplate.make, {
-                  targetYear: state[/* targetYear */7],
-                  targetAmount: state[/* targetAmount */5]
-                }), React.createElement(Table$ReactHooksTemplate.make, {
-                  data: state[/* compoundInterest */3]
-                }));
+                    }, "Calculate")), match$1 ? React.createElement(React.Fragment, undefined, React.createElement(Result$ReactHooksTemplate.make, {
+                        targetYear: state[/* targetYear */8],
+                        targetAmount: state[/* targetAmount */7]
+                      }), React.createElement(Table$ReactHooksTemplate.make, {
+                        data: state[/* compoundInterest */1]
+                      })) : null);
 }
 
 var make = Calc;
