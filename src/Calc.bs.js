@@ -87,14 +87,15 @@ function reducer(state, action) {
               /* targetYear */state[/* targetYear */7]
             ];
     } else {
-      var compoundInterest = Finance$ReactHooksTemplate.compoundInterest(7.0, Caml_format.caml_float_of_string(state[/* currBalance */4]), Finance$ReactHooksTemplate.savings(Caml_format.caml_float_of_string(state[/* income */1]), Caml_format.caml_float_of_string(state[/* spending */2])) * 12.0);
+      var yearlySavings = Finance$ReactHooksTemplate.savings(Caml_format.caml_float_of_string(state[/* income */1]), Caml_format.caml_float_of_string(state[/* spending */2])) * 12.0;
+      var compoundInterest = Finance$ReactHooksTemplate.compoundInterest(Caml_format.caml_float_of_string(state[/* annualReturn */0]), Caml_format.caml_float_of_string(state[/* currBalance */4]), yearlySavings);
       var targetAmount = Caml_format.caml_float_of_string(state[/* spending */2]) * 12.0 * 25.0;
       var targetYear = Finance$ReactHooksTemplate.getFIREYear(compoundInterest, targetAmount);
       return /* record */[
               /* annualReturn */state[/* annualReturn */0],
               /* income */state[/* income */1],
               /* spending */state[/* spending */2],
-              /* compoundInterest */Finance$ReactHooksTemplate.compoundInterest(Caml_format.caml_float_of_string(state[/* annualReturn */0]), Caml_format.caml_float_of_string(state[/* currBalance */4]), Finance$ReactHooksTemplate.savings(Caml_format.caml_float_of_string(state[/* income */1]), Caml_format.caml_float_of_string(state[/* spending */2])) * 12.0),
+              /* compoundInterest */compoundInterest,
               /* currBalance */state[/* currBalance */4],
               /* targetAmount */targetAmount.toString(),
               /* savingsRate */state[/* savingsRate */6],

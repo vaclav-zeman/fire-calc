@@ -57,16 +57,17 @@ let reducer = (state, action) =>
         ++ "%",
     }
   | Submit =>
+    let yearlySavings =
+      Finance.savings(
+        ~income=float_of_string(state.income),
+        ~spending=float_of_string(state.spending),
+      )
+      *. 12.0;
     let compoundInterest =
       Finance.compoundInterest(
-        ~rate=7.0,
+        ~rate=float_of_string(state.annualReturn),
         ~principal=float_of_string(state.currBalance),
-        ~yearlySavings=
-          Finance.savings(
-            ~income=float_of_string(state.income),
-            ~spending=float_of_string(state.spending),
-          )
-          *. 12.0,
+        ~yearlySavings,
       );
     let targetAmount = float_of_string(state.spending) *. 12.0 *. 25.0;
     let targetYear =
@@ -75,17 +76,7 @@ let reducer = (state, action) =>
     {
       ...state,
       targetAmount: targetAmount |> Js.Float.toString,
-      compoundInterest:
-        Finance.compoundInterest(
-          ~rate=float_of_string(state.annualReturn),
-          ~principal=float_of_string(state.currBalance),
-          ~yearlySavings=
-            Finance.savings(
-              ~income=float_of_string(state.income),
-              ~spending=float_of_string(state.spending),
-            )
-            *. 12.0,
-        ),
+      compoundInterest,
       targetYear:
         switch (targetYear) {
         | Some(year) => year |> string_of_int
