@@ -44,7 +44,7 @@ function savings(income, spending) {
 }
 
 function savingsRate(income, spending) {
-  return Math.round((income - spending) / income * 100.0);
+  return Math.floor((income - spending) / income * 100.0);
 }
 
 exports.compoundInterest = compoundInterest;

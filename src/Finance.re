@@ -44,4 +44,4 @@ let getFIREYear = (~amounts, ~targetAmount) => {
 let savings = (~income, ~spending) => income -. spending;
 
 let savingsRate = (~income, ~spending) =>
-  Js.Math.round(savings(~income, ~spending) /. income *. 100.0);
+  Js.Math.floor_float(savings(~income, ~spending) /. income *. 100.0);

@@ -1,8 +1,9 @@
 type fields =
-  | Income
+  | AnnualReturn
   | CurrentBalance
-  | Spending
-  | SavingsRate;
+  | Income
+  | SavingsRate
+  | Spending;
 
 type action =
   | InputChange(fields, string)
@@ -10,6 +11,7 @@ type action =
   | UpdateSavingsRate;
 
 type state = {
+  annualReturn: string,
   income: string,
   spending: string,
   compoundInterest: list(float),
@@ -20,17 +22,19 @@ type state = {
 };
 
 let initialState = {
+  annualReturn: "7",
   income: "30000",
   spending: "10000",
   currBalance: "0",
   compoundInterest: [],
   targetAmount: "",
-  savingsRate: "",
+  savingsRate: "67%",
   targetYear: "",
 };
 
 let updateFormState = (state: state, field: fields, value: string) =>
   switch (field) {
+  | AnnualReturn => {...state, annualReturn: value}
   | CurrentBalance => {...state, currBalance: value}
   | Income => {...state, income: value}
   | Spending => {...state, spending: value}
@@ -43,11 +47,12 @@ let reducer = (state, action) =>
   | UpdateSavingsRate => {
       ...state,
       savingsRate:
-        Js.Float.toString(
+        (
           Finance.savingsRate(
             ~income=float_of_string(state.income),
             ~spending=float_of_string(state.spending),
-          ),
+          )
+          |> Js.Float.toString
         )
         ++ "%",
     }
@@ -63,7 +68,7 @@ let reducer = (state, action) =>
           )
           *. 12.0,
       );
-    let targetAmount = float_of_string(state.spending) *. 25.0;
+    let targetAmount = float_of_string(state.spending) *. 12.0 *. 25.0;
     let targetYear =
       Finance.getFIREYear(~amounts=compoundInterest, ~targetAmount);
 
@@ -72,7 +77,7 @@ let reducer = (state, action) =>
       targetAmount: targetAmount |> Js.Float.toString,
       compoundInterest:
         Finance.compoundInterest(
-          ~rate=7.0,
+          ~rate=float_of_string(state.annualReturn),
           ~principal=float_of_string(state.currBalance),
           ~yearlySavings=
             Finance.savings(
@@ -107,12 +112,13 @@ let make = () => {
         {"Current Balance" |> ReasonReact.string}
         <Input
           onChange=handleChange
+          onBlur=handleBlur
           name=CurrentBalance
           value={state.currBalance}
         />
       </Label>
       <Label>
-        {"Income" |> ReasonReact.string}
+        {"Income (monthly)" |> ReasonReact.string}
         <Input
           onChange=handleChange
           onBlur=handleBlur
@@ -121,7 +127,7 @@ let make = () => {
         />
       </Label>
       <Label>
-        {"Spending" |> ReasonReact.string}
+        {"Spending (monthly)" |> ReasonReact.string}
         <Input
           onChange=handleChange
           onBlur=handleBlur
@@ -137,22 +143,33 @@ let make = () => {
           value={state.savingsRate}
         />
       </Label>
+      <Label>
+        {"Expected annual return (%)" |> ReasonReact.string}
+        <Input
+          onChange=handleChange
+          onBlur=handleBlur
+          name=AnnualReturn
+          value={state.annualReturn}
+        />
+      </Label>
       <button className="button is-primary">
         {"Calculate" |> ReasonReact.string}
       </button>
     </form>
     <div className="section">
       <h2>
-        {"Needed for retirement:" |> ReasonReact.string}
-        {state.targetAmount |> ReasonReact.string}
+        {"Needed for retirement: " |> ReasonReact.string}
+        <FormattedCurrency value={state.targetAmount} />
         <br />
-        {"Achievable in year:" |> ReasonReact.string}
+        {"Achievable in year: " |> ReasonReact.string}
         {state.targetYear |> ReasonReact.string}
       </h2>
-      {List.map(
-         amount =>
-           <h1> {Js.Float.toString(amount) |> ReasonReact.string} </h1>,
-         state.compoundInterest,
+      {Belt.List.mapWithIndex(state.compoundInterest, (index, amount) =>
+         <h1>
+           {index + 1 |> string_of_int |> ReasonReact.string}
+           {" - " |> ReasonReact.string}
+           <FormattedCurrency value=amount />
+         </h1>
        )
        |> Array.of_list
        |> ReasonReact.array}
