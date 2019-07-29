@@ -105,7 +105,7 @@ let make = () => {
     Submit |> dispatch;
   };
 
-  <section className="container">
+  <main className="container">
     <form className=" section" onSubmit=handleSubmit>
       <h1 className="title"> {"FIRE Calculator" |> ReasonReact.string} </h1>
       <Label>
@@ -156,23 +156,7 @@ let make = () => {
         {"Calculate" |> ReasonReact.string}
       </button>
     </form>
-    <div className="section">
-      <h2>
-        {"Needed for retirement: " |> ReasonReact.string}
-        <FormattedCurrency value={state.targetAmount} />
-        <br />
-        {"Achievable in year: " |> ReasonReact.string}
-        {state.targetYear |> ReasonReact.string}
-      </h2>
-      {Belt.List.mapWithIndex(state.compoundInterest, (index, amount) =>
-         <h1>
-           {index + 1 |> string_of_int |> ReasonReact.string}
-           {" - " |> ReasonReact.string}
-           <FormattedCurrency value=amount />
-         </h1>
-       )
-       |> Array.of_list
-       |> ReasonReact.array}
-    </div>
-  </section>;
+    <Result targetAmount={state.targetAmount} targetYear={state.targetYear} />
+    <Table data={state.compoundInterest} />
+  </main>;
 };
