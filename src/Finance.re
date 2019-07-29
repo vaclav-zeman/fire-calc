@@ -8,7 +8,7 @@
 let compoundInterest = (~rate, ~principal, ~yearlySavings) => {
   let numOfCompoundings = 1.0;
   let numOfPeriods = 25;
-  let yearsArray = Belt.Array.range(1, numOfPeriods);
+  let yearsArray = Belt.List.fromArray(Belt.Array.range(1, numOfPeriods));
 
   let calculate = (~prevValue) => {
     (prevValue +. yearlySavings)
@@ -16,21 +16,19 @@ let compoundInterest = (~rate, ~principal, ~yearlySavings) => {
     |> Js.Math.round;
   };
 
-  Array.fold_left(
+  List.fold_left(
     (acc, year) => {
-      let index = Array.length(acc) - 1;
-      let maybePrevVal = index >= 0 ? acc[Array.length(acc) - 1] : None;
-      let prevValue: float =
-        switch (maybePrevVal) {
-        | Some(maybePrevVal) => maybePrevVal
-        | None => principal
-        };
-
-      Array.append(acc, [|Some(calculate(~prevValue))|]);
+      let index = List.length(acc) - 1;
+      let prevValue = index >= 0 ? List.nth(acc, index) : principal;
+      List.append(acc, [calculate(~prevValue)]);
     },
-    [||],
+    [],
     yearsArray,
   );
+};
+
+let getFIREYear = (~amounts, ~targetAmount, ~index) => {
+  2;
 };
 
 let savings = (~income, ~spending) => income -. spending;

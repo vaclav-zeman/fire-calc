@@ -12,19 +12,21 @@ type action =
 type state = {
   income: string,
   spending: string,
-  compoundInterest: array(option(float)),
+  compoundInterest: list(float),
   currBalance: string,
-  retirementAmount: string,
+  targetAmount: string,
   savingsRate: string,
+  targetYear: string,
 };
 
 let initialState = {
   income: "30000",
   spending: "10000",
   currBalance: "0",
-  compoundInterest: [||],
-  retirementAmount: "",
+  compoundInterest: [],
+  targetAmount: "",
   savingsRate: "",
+  targetYear: "",
 };
 
 let updateFormState = (state: state, field: fields, value: string) =>
@@ -49,10 +51,23 @@ let reducer = (state, action) =>
         )
         ++ "%",
     }
-  | Submit => {
+  | Submit =>
+    let compoundInterest =
+      Finance.compoundInterest(
+        ~rate=7.0,
+        ~principal=float_of_string(state.currBalance),
+        ~yearlySavings=
+          Finance.savings(
+            ~income=float_of_string(state.income),
+            ~spending=float_of_string(state.spending),
+          )
+          *. 12.0,
+      );
+    let targetAmount = float_of_string(state.spending) *. 25.0;
+
+    {
       ...state,
-      retirementAmount:
-        float_of_string(state.spending) *. 25.0 |> Js.Float.toString,
+      targetAmount: targetAmount |> Js.Float.toString,
       compoundInterest:
         Finance.compoundInterest(
           ~rate=7.0,
@@ -64,7 +79,10 @@ let reducer = (state, action) =>
             )
             *. 12.0,
         ),
-    }
+      targetYear:
+        Finance.getFIREYear(~amounts=compoundInterest, ~targetAmount)
+        |> string_of_int,
+    };
   };
 
 [@react.component]
@@ -122,18 +140,17 @@ let make = () => {
     <div className="section">
       <h2>
         {"Needed for retirement:" |> ReasonReact.string}
-        {state.retirementAmount |> ReasonReact.string}
+        {state.targetAmount |> ReasonReact.string}
+        <br />
         {"Achievable in year:" |> ReasonReact.string}
+        {state.targetYear |> ReasonReact.string}
       </h2>
-      {Array.map(
+      {List.map(
          amount =>
-           switch (amount) {
-           | Some(amount) =>
-             <h1> {Js.Float.toString(amount) |> ReasonReact.string} </h1>
-           | None => <span />
-           },
+           <h1> {Js.Float.toString(amount) |> ReasonReact.string} </h1>,
          state.compoundInterest,
        )
+       |> Array.of_list
        |> ReasonReact.array}
     </div>
   </section>;
