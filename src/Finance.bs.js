@@ -2,21 +2,29 @@
 'use strict';
 
 var List = require("bs-platform/lib/js/list.js");
-var Caml_obj = require("bs-platform/lib/js/caml_obj.js");
-var Belt_List = require("bs-platform/lib/js/belt_List.js");
+var $$Array = require("bs-platform/lib/js/array.js");
 var Belt_Array = require("bs-platform/lib/js/belt_Array.js");
 
-function compoundInterest(rate, principal, yearlySavings) {
-  var yearsArray = Belt_List.fromArray(Belt_Array.range(1, 25));
+function getResultList(rate, principal, yearlySavings) {
+  var yearsArray = Belt_Array.range(1, 25);
   var calculate = function (prevValue) {
     return Math.round((prevValue + yearlySavings) * (1.0 + rate / 100.0 / 1.0));
   };
-  return List.fold_left((function (acc, year) {
+  return $$Array.fold_left((function (acc, year) {
                 var index = List.length(acc) - 1 | 0;
                 var match = index >= 0;
-                var prevValue = match ? List.nth(acc, index) : principal;
+                var prevValue = match ? List.nth(acc, index)[/* netWorth */1] : principal;
+                var netWorth = calculate(prevValue);
+                var roi = netWorth - yearlySavings - prevValue;
+                var changeInNetWorth = netWorth - prevValue;
+                var result = /* record */[
+                  /* year */year,
+                  /* netWorth */netWorth,
+                  /* changeInNetWorth */changeInNetWorth,
+                  /* roi */roi
+                ];
                 return List.append(acc, /* :: */[
-                            calculate(prevValue),
+                            result,
                             /* [] */0
                           ]);
               }), /* [] */0, yearsArray);
@@ -30,7 +38,7 @@ function getFIREYear(amounts, targetAmount) {
     var index = $staropt$star !== undefined ? $staropt$star : 0;
     if (amountsLength === index) {
       return undefined;
-    } else if (Caml_obj.caml_greaterequal(List.nth(amounts, index), targetAmount)) {
+    } else if (List.nth(amounts, index)[/* netWorth */1] >= targetAmount) {
       return index + 1 | 0;
     } else {
       _$staropt$star = index + 1 | 0;
@@ -47,7 +55,7 @@ function savingsRate(income, spending) {
   return Math.floor((income - spending) / income * 100.0);
 }
 
-exports.compoundInterest = compoundInterest;
+exports.getResultList = getResultList;
 exports.getFIREYear = getFIREYear;
 exports.savings = savings;
 exports.savingsRate = savingsRate;

@@ -12,7 +12,7 @@ type action =
 
 type state = {
   annualReturn: string,
-  compoundInterest: list(float),
+  resultList: Finance.resultList,
   currBalance: string,
   hasSubmitted: bool,
   income: string,
@@ -24,7 +24,7 @@ type state = {
 
 let initialState = {
   annualReturn: "7",
-  compoundInterest: [],
+  resultList: [],
   currBalance: "0",
   hasSubmitted: false,
   income: "30000",
@@ -65,21 +65,20 @@ let reducer = (state, action) =>
         ~spending=float_of_string(state.spending),
       )
       *. 12.0;
-    let compoundInterest =
-      Finance.compoundInterest(
+    let resultList: Finance.resultList =
+      Finance.getResultList(
         ~rate=float_of_string(state.annualReturn),
         ~principal=float_of_string(state.currBalance),
         ~yearlySavings,
       );
     let targetAmount = float_of_string(state.spending) *. 12.0 *. 25.0;
-    let targetYear =
-      Finance.getFIREYear(~amounts=compoundInterest, ~targetAmount);
+    let targetYear = Finance.getFIREYear(~amounts=resultList, ~targetAmount);
 
     {
       ...state,
       hasSubmitted: true,
       targetAmount: targetAmount |> Js.Float.toString,
-      compoundInterest,
+      resultList,
       targetYear:
         switch (targetYear) {
         | Some(year) => year |> string_of_int
@@ -93,14 +92,14 @@ let make = () => {
   let (state, dispatch) = React.useReducer(reducer, initialState);
 
   let handleChange = (name, value) => InputChange(name, value) |> dispatch;
-  let handleBlur = (name, e) => UpdateSavingsRate |> dispatch;
+  let handleBlur = (_, _) => UpdateSavingsRate |> dispatch;
   let handleSubmit = e => {
     ReactEvent.Synthetic.preventDefault(e);
     Submit |> dispatch;
   };
 
   <main className="container">
-    <form className=" section" onSubmit=handleSubmit>
+    <form className="section" onSubmit=handleSubmit>
       <h1 className="title"> {"FIRE Calculator" |> ReasonReact.string} </h1>
       <Label>
         {"Current Balance" |> ReasonReact.string}
@@ -155,8 +154,9 @@ let make = () => {
            <Result
              targetAmount={state.targetAmount}
              targetYear={state.targetYear}
+             savingsRate={state.savingsRate}
            />
-           <Table data={state.compoundInterest} />
+           <Table annualReturn={state.annualReturn} data={state.resultList} />
          </>
        : ReasonReact.null}
   </main>;

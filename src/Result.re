@@ -1,5 +1,5 @@
 [@react.component]
-let make = (~targetYear, ~targetAmount) =>
+let make = (~targetYear, ~targetAmount, ~savingsRate) =>
   <div className="section">
     <div className="box">
       <h2 className="title is-3">
@@ -7,9 +7,13 @@ let make = (~targetYear, ~targetAmount) =>
         {targetYear |> ReasonReact.string}
         {" years" |> ReasonReact.string}
       </h2>
-      <strong className="title is-4">
+      <h3 className="title is-4">
+        {"With savings rate: " |> ReasonReact.string}
+        savingsRate
+      </h3>
+      <h3 className="title is-4">
         {"Needed for retirement: " |> ReasonReact.string}
         <FormattedCurrency value=targetAmount />
-      </strong>
+      </h3>
     </div>
   </div>;

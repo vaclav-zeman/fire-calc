@@ -12,7 +12,7 @@ var Finance$ReactHooksTemplate = require("./Finance.bs.js");
 
 var initialState = /* record */[
   /* annualReturn */"7",
-  /* compoundInterest : [] */0,
+  /* resultList : [] */0,
   /* currBalance */"0",
   /* hasSubmitted */false,
   /* income */"30000",
@@ -27,7 +27,7 @@ function updateFormState(state, field, value) {
     case 0 : 
         return /* record */[
                 /* annualReturn */value,
-                /* compoundInterest */state[/* compoundInterest */1],
+                /* resultList */state[/* resultList */1],
                 /* currBalance */state[/* currBalance */2],
                 /* hasSubmitted */state[/* hasSubmitted */3],
                 /* income */state[/* income */4],
@@ -39,7 +39,7 @@ function updateFormState(state, field, value) {
     case 1 : 
         return /* record */[
                 /* annualReturn */state[/* annualReturn */0],
-                /* compoundInterest */state[/* compoundInterest */1],
+                /* resultList */state[/* resultList */1],
                 /* currBalance */value,
                 /* hasSubmitted */state[/* hasSubmitted */3],
                 /* income */state[/* income */4],
@@ -51,7 +51,7 @@ function updateFormState(state, field, value) {
     case 2 : 
         return /* record */[
                 /* annualReturn */state[/* annualReturn */0],
-                /* compoundInterest */state[/* compoundInterest */1],
+                /* resultList */state[/* resultList */1],
                 /* currBalance */state[/* currBalance */2],
                 /* hasSubmitted */state[/* hasSubmitted */3],
                 /* income */value,
@@ -65,7 +65,7 @@ function updateFormState(state, field, value) {
     case 4 : 
         return /* record */[
                 /* annualReturn */state[/* annualReturn */0],
-                /* compoundInterest */state[/* compoundInterest */1],
+                /* resultList */state[/* resultList */1],
                 /* currBalance */state[/* currBalance */2],
                 /* hasSubmitted */state[/* hasSubmitted */3],
                 /* income */state[/* income */4],
@@ -83,7 +83,7 @@ function reducer(state, action) {
     if (action !== 0) {
       return /* record */[
               /* annualReturn */state[/* annualReturn */0],
-              /* compoundInterest */state[/* compoundInterest */1],
+              /* resultList */state[/* resultList */1],
               /* currBalance */state[/* currBalance */2],
               /* hasSubmitted */state[/* hasSubmitted */3],
               /* income */state[/* income */4],
@@ -94,12 +94,12 @@ function reducer(state, action) {
             ];
     } else {
       var yearlySavings = Finance$ReactHooksTemplate.savings(Caml_format.caml_float_of_string(state[/* income */4]), Caml_format.caml_float_of_string(state[/* spending */6])) * 12.0;
-      var compoundInterest = Finance$ReactHooksTemplate.compoundInterest(Caml_format.caml_float_of_string(state[/* annualReturn */0]), Caml_format.caml_float_of_string(state[/* currBalance */2]), yearlySavings);
+      var resultList = Finance$ReactHooksTemplate.getResultList(Caml_format.caml_float_of_string(state[/* annualReturn */0]), Caml_format.caml_float_of_string(state[/* currBalance */2]), yearlySavings);
       var targetAmount = Caml_format.caml_float_of_string(state[/* spending */6]) * 12.0 * 25.0;
-      var targetYear = Finance$ReactHooksTemplate.getFIREYear(compoundInterest, targetAmount);
+      var targetYear = Finance$ReactHooksTemplate.getFIREYear(resultList, targetAmount);
       return /* record */[
               /* annualReturn */state[/* annualReturn */0],
-              /* compoundInterest */compoundInterest,
+              /* resultList */resultList,
               /* currBalance */state[/* currBalance */2],
               /* hasSubmitted */true,
               /* income */state[/* income */4],
@@ -124,7 +124,7 @@ function Calc(Props) {
                 value
               ]);
   };
-  var handleBlur = function (name, e) {
+  var handleBlur = function (param, param$1) {
     return Curry._1(dispatch, /* UpdateSavingsRate */1);
   };
   var handleSubmit = function (e) {
@@ -135,7 +135,7 @@ function Calc(Props) {
   return React.createElement("main", {
               className: "container"
             }, React.createElement("form", {
-                  className: " section",
+                  className: "section",
                   onSubmit: handleSubmit
                 }, React.createElement("h1", {
                       className: "title"
@@ -177,9 +177,11 @@ function Calc(Props) {
                       className: "button is-primary"
                     }, "Calculate")), match$1 ? React.createElement(React.Fragment, undefined, React.createElement(Result$ReactHooksTemplate.make, {
                         targetYear: state[/* targetYear */8],
-                        targetAmount: state[/* targetAmount */7]
+                        targetAmount: state[/* targetAmount */7],
+                        savingsRate: state[/* savingsRate */5]
                       }), React.createElement(Table$ReactHooksTemplate.make, {
-                        data: state[/* compoundInterest */1]
+                        annualReturn: state[/* annualReturn */0],
+                        data: state[/* resultList */1]
                       })) : null);
 }
 
