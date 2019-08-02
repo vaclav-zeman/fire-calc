@@ -18,8 +18,8 @@ var initialState = /* record */[
   /* income */"30000",
   /* savingsRate */"67%",
   /* spending */"10000",
-  /* targetAmount */"",
-  /* targetYear */""
+  /* targetAmount */0.0,
+  /* targetYear */undefined
 ];
 
 function updateFormState(state, field, value) {
@@ -105,8 +105,8 @@ function reducer(state, action) {
               /* income */state[/* income */4],
               /* savingsRate */state[/* savingsRate */5],
               /* spending */state[/* spending */6],
-              /* targetAmount */targetAmount.toString(),
-              /* targetYear */targetYear !== undefined ? String(targetYear) : "Not in range"
+              /* targetAmount */targetAmount,
+              /* targetYear */targetYear
             ];
     }
   } else {

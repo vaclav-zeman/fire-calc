@@ -8,13 +8,14 @@ function Result(Props) {
   var targetYear = Props.targetYear;
   var targetAmount = Props.targetAmount;
   var savingsRate = Props.savingsRate;
+  var year = targetYear !== undefined ? String(targetYear) : "Not in range";
   return React.createElement("div", {
               className: "section"
             }, React.createElement("div", {
                   className: "box"
                 }, React.createElement("h2", {
                       className: "title is-3"
-                    }, "Retire in: ", targetYear, " years"), React.createElement("h3", {
+                    }, "Retire in: ", year, " years"), React.createElement("h3", {
                       className: "title is-4"
                     }, "With savings rate: ", savingsRate), React.createElement("h3", {
                       className: "title is-4"

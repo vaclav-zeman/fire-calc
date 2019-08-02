@@ -18,8 +18,8 @@ type state = {
   income: string,
   savingsRate: string,
   spending: string,
-  targetAmount: string,
-  targetYear: string,
+  targetAmount: float,
+  targetYear: option(int),
 };
 
 let initialState = {
@@ -30,8 +30,8 @@ let initialState = {
   income: "30000",
   savingsRate: "67%",
   spending: "10000",
-  targetAmount: "",
-  targetYear: "",
+  targetAmount: 0.0,
+  targetYear: None,
 };
 
 let updateFormState = (state: state, field: fields, value: string) =>
@@ -74,17 +74,7 @@ let reducer = (state, action) =>
     let targetAmount = float_of_string(state.spending) *. 12.0 *. 25.0;
     let targetYear = Finance.getFIREYear(~amounts=resultList, ~targetAmount);
 
-    {
-      ...state,
-      hasSubmitted: true,
-      targetAmount: targetAmount |> Js.Float.toString,
-      resultList,
-      targetYear:
-        switch (targetYear) {
-        | Some(year) => year |> string_of_int
-        | None => "Not in range"
-        },
-    };
+    {...state, hasSubmitted: true, targetAmount, resultList, targetYear};
   };
 
 [@react.component]
