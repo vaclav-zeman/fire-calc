@@ -6,7 +6,7 @@ var Finance$ReactHooksTemplate = require("./Finance.bs.js");
 
 function reducer(param, action) {
   var formValues = action[0];
-  var yearlySavings = Finance$ReactHooksTemplate.savings(Caml_format.caml_float_of_string(formValues[/* income */2]), Caml_format.caml_float_of_string(formValues[/* spending */3]));
+  var yearlySavings = Caml_format.caml_float_of_string(formValues[/* income */2]) - Caml_format.caml_float_of_string(formValues[/* spending */3]);
   var resultList = Finance$ReactHooksTemplate.getResultList(Caml_format.caml_float_of_string(formValues[/* annualReturn */0]), Caml_format.caml_float_of_string(formValues[/* currBalance */1]), yearlySavings);
   var targetAmount = Caml_format.caml_float_of_string(formValues[/* spending */3]) * 25.0;
   var targetYear = Finance$ReactHooksTemplate.getFIREYear(resultList, targetAmount);

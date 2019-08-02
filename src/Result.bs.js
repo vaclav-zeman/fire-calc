@@ -17,7 +17,7 @@ function Result(Props) {
                       className: "title is-3"
                     }, "Retire in: ", year, " years"), React.createElement("h3", {
                       className: "title is-4"
-                    }, "With savings rate: ", savingsRate), React.createElement("h3", {
+                    }, "With savings rate: ", savingsRate, "%"), React.createElement("h3", {
                       className: "title is-4"
                     }, "Needed for retirement: ", React.createElement(FormattedCurrency$ReactHooksTemplate.make, {
                           value: targetAmount

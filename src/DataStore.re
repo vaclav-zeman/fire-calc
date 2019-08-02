@@ -17,10 +17,9 @@ module Data = {
     switch (action) {
     | Calculate(formValues) =>
       let yearlySavings =
-        Finance.savings(
-          ~income=float_of_string(formValues.income),
-          ~spending=float_of_string(formValues.spending),
-        );
+        float_of_string(formValues.income)
+        -. float_of_string(formValues.spending);
+
       let resultList: Finance.resultList =
         Finance.getResultList(
           ~rate=float_of_string(formValues.annualReturn),

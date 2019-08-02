@@ -2,7 +2,7 @@ type resultRecord = {
   year: int,
   netWorth: float,
   changeInNetWorth: float,
-  roi: float
+  roi: float,
 };
 
 type resultList = list(resultRecord);
@@ -25,7 +25,7 @@ let getResultList = (~rate, ~principal, ~yearlySavings) => {
       let netWorth = calculate(~prevValue);
       let roi = netWorth -. yearlySavings -. prevValue;
       let changeInNetWorth = netWorth -. prevValue;
-      let result = { year, netWorth, changeInNetWorth, roi };
+      let result = {year, netWorth, changeInNetWorth, roi};
 
       List.append(acc, [result]);
     },
@@ -48,7 +48,8 @@ let getFIREYear = (~amounts, ~targetAmount) => {
   calculate(~index=0);
 };
 
-let savings = (~income, ~spending) => income -. spending;
+let getSavingsRate = (~income, ~spending) =>
+  Js.Math.floor_float(spending /. income *. 100.0);
 
-let savingsRate = (~income, ~spending) =>
-  Js.Math.floor_float(savings(~income, ~spending) /. income *. 100.0);
+let getSpendingBySavings = (~income, ~savingsRate) =>
+  Js.Math.floor_float(income *. savingsRate /. 100.0);

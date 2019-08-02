@@ -47,16 +47,16 @@ function getFIREYear(amounts, targetAmount) {
   };
 }
 
-function savings(income, spending) {
-  return income - spending;
+function getSavingsRate(income, spending) {
+  return Math.floor(spending / income * 100.0);
 }
 
-function savingsRate(income, spending) {
-  return Math.floor((income - spending) / income * 100.0);
+function getSpendingBySavings(income, savingsRate) {
+  return Math.floor(income * savingsRate / 100.0);
 }
 
 exports.getResultList = getResultList;
 exports.getFIREYear = getFIREYear;
-exports.savings = savings;
-exports.savingsRate = savingsRate;
+exports.getSavingsRate = getSavingsRate;
+exports.getSpendingBySavings = getSpendingBySavings;
 /* No side effect */

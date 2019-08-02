@@ -10,7 +10,7 @@ let make = () => {
 
   let handleChange = (name, value) =>
     Form.InputChange(name, value) |> dispatchForm;
-  let handleBlur = (_, _) => Form.UpdateSavingsRate |> dispatchForm;
+  let handleBlur = (name, _) => Form.UpdateSavingsRate(name) |> dispatchForm;
   let handleSubmit = e => {
     ReactEvent.Synthetic.preventDefault(e);
     dispatchForm(Form.Submit);
@@ -21,7 +21,7 @@ let make = () => {
     <form className="section" onSubmit=handleSubmit>
       <h1 className="title"> {"FIRE Calculator" |> ReasonReact.string} </h1>
       <Label>
-        {"Current Balance" |> ReasonReact.string}
+        {"Currently Saved / Invested" |> ReasonReact.string}
         <Input
           onChange=handleChange
           onBlur=handleBlur
@@ -48,10 +48,11 @@ let make = () => {
         />
       </Label>
       <Label>
-        {"Savings rate" |> ReasonReact.string}
+        {"Savings rate (%)" |> ReasonReact.string}
         <Input
           onChange=handleChange
           name=Form.SavingsRate
+          onBlur=handleBlur
           value={formState.savingsRate}
         />
       </Label>

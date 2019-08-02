@@ -17,6 +17,7 @@ let make =
       <h3 className="title is-4">
         {"With savings rate: " |> ReasonReact.string}
         {savingsRate |> ReasonReact.string}
+        {"%" |> ReasonReact.string}
       </h3>
       <h3 className="title is-4">
         {"Needed for retirement: " |> ReasonReact.string}

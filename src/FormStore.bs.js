@@ -34,7 +34,14 @@ function updateFormState(state, field, value) {
                 /* hasSubmitted */state[/* hasSubmitted */5]
               ];
     case 3 : 
-        return state;
+        return /* record */[
+                /* annualReturn */state[/* annualReturn */0],
+                /* currBalance */state[/* currBalance */1],
+                /* income */state[/* income */2],
+                /* spending */state[/* spending */3],
+                /* savingsRate */value,
+                /* hasSubmitted */state[/* hasSubmitted */5]
+              ];
     case 4 : 
         return /* record */[
                 /* annualReturn */state[/* annualReturn */0],
@@ -50,13 +57,22 @@ function updateFormState(state, field, value) {
 
 function reducer(state, action) {
   if (typeof action === "number") {
-    if (action !== 0) {
+    return /* record */[
+            /* annualReturn */state[/* annualReturn */0],
+            /* currBalance */state[/* currBalance */1],
+            /* income */state[/* income */2],
+            /* spending */state[/* spending */3],
+            /* savingsRate */state[/* savingsRate */4],
+            /* hasSubmitted */true
+          ];
+  } else if (action.tag) {
+    if (action[0] === /* SavingsRate */3) {
       return /* record */[
               /* annualReturn */state[/* annualReturn */0],
               /* currBalance */state[/* currBalance */1],
               /* income */state[/* income */2],
-              /* spending */state[/* spending */3],
-              /* savingsRate */Finance$ReactHooksTemplate.savingsRate(Caml_format.caml_float_of_string(state[/* income */2]), Caml_format.caml_float_of_string(state[/* spending */3])).toString() + "%",
+              /* spending */Finance$ReactHooksTemplate.getSpendingBySavings(Caml_format.caml_float_of_string(state[/* income */2]), Caml_format.caml_float_of_string(state[/* savingsRate */4])).toString(),
+              /* savingsRate */state[/* savingsRate */4],
               /* hasSubmitted */state[/* hasSubmitted */5]
             ];
     } else {
@@ -65,8 +81,8 @@ function reducer(state, action) {
               /* currBalance */state[/* currBalance */1],
               /* income */state[/* income */2],
               /* spending */state[/* spending */3],
-              /* savingsRate */state[/* savingsRate */4],
-              /* hasSubmitted */true
+              /* savingsRate */Finance$ReactHooksTemplate.getSavingsRate(Caml_format.caml_float_of_string(state[/* income */2]), Caml_format.caml_float_of_string(state[/* spending */3])).toString(),
+              /* hasSubmitted */state[/* hasSubmitted */5]
             ];
     }
   } else {
@@ -79,7 +95,7 @@ var Form_000 = /* initialState : record */[
   /* currBalance */"0",
   /* income */"360000",
   /* spending */"120000",
-  /* savingsRate */"66%",
+  /* savingsRate */"66",
   /* hasSubmitted */false
 ];
 
