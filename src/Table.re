@@ -14,7 +14,7 @@ let make = (~annualReturn: string, ~data: Finance.resultList) =>
       </div>
       {List.map(
          ({year, netWorth, changeInNetWorth, roi}: Finance.resultRecord) =>
-           <div className="columns">
+           <div key={year |> string_of_int} className="columns">
              <div className="column">
                {year |> string_of_int |> ReasonReact.string}
              </div>

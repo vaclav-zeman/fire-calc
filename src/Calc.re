@@ -1,93 +1,20 @@
-type fields =
-  | AnnualReturn
-  | CurrentBalance
-  | Income
-  | SavingsRate
-  | Spending;
-
-type action =
-  | InputChange(fields, string)
-  | Submit
-  | UpdateSavingsRate;
-
-type state = {
-  annualReturn: string,
-  resultList: Finance.resultList,
-  currBalance: string,
-  hasSubmitted: bool,
-  income: string,
-  savingsRate: string,
-  spending: string,
-  targetAmount: float,
-  targetYear: option(int),
-};
-
-let initialState = {
-  annualReturn: "7",
-  resultList: [],
-  currBalance: "0",
-  hasSubmitted: false,
-  income: "360000",
-  savingsRate: "66%",
-  spending: "120000",
-  targetAmount: 0.0,
-  targetYear: None,
-};
-
-// 25x of yearly expenses is considered save for retiring for ordinary person
-let magicConstant = 25.0;
-
-let updateFormState = (state: state, field: fields, value: string) =>
-  switch (field) {
-  | AnnualReturn => {...state, annualReturn: value}
-  | CurrentBalance => {...state, currBalance: value}
-  | Income => {...state, income: value}
-  | Spending => {...state, spending: value}
-  | SavingsRate => state
-  };
-
-let reducer = (state, action) =>
-  switch (action) {
-  | InputChange(field, value) => updateFormState(state, field, value)
-  | UpdateSavingsRate => {
-      ...state,
-      savingsRate:
-        (
-          Finance.savingsRate(
-            ~income=float_of_string(state.income),
-            ~spending=float_of_string(state.spending),
-          )
-          |> Js.Float.toString
-        )
-        ++ "%",
-    }
-  | Submit =>
-    let yearlySavings =
-      Finance.savings(
-        ~income=float_of_string(state.income),
-        ~spending=float_of_string(state.spending),
-      );
-    let resultList: Finance.resultList =
-      Finance.getResultList(
-        ~rate=float_of_string(state.annualReturn),
-        ~principal=float_of_string(state.currBalance),
-        ~yearlySavings,
-      );
-    let targetAmount = float_of_string(state.spending) *. magicConstant;
-    let targetYear = Finance.getFIREYear(~amounts=resultList, ~targetAmount);
-
-    {...state, hasSubmitted: true, targetAmount, resultList, targetYear};
-  };
+open FormStore;
+open DataStore;
 
 [@react.component]
 let make = () => {
-  let (state, dispatch) = React.useReducer(reducer, initialState);
+  let (dataState, dispatchData) =
+    React.useReducer(Data.reducer, Data.initialState);
+  let (formState, dispatchForm) =
+    React.useReducer(Form.reducer, Form.initialState);
 
-  let handleChange = (name, value) => InputChange(name, value) |> dispatch;
-  let handleBlur = (_, _) => UpdateSavingsRate |> dispatch;
+  let handleChange = (name, value) =>
+    Form.InputChange(name, value) |> dispatchForm;
+  let handleBlur = (_, _) => Form.UpdateSavingsRate |> dispatchForm;
   let handleSubmit = e => {
     ReactEvent.Synthetic.preventDefault(e);
-    Submit |> dispatch;
+    dispatchForm(Form.Submit);
+    dispatchData(Data.Calculate(formState));
   };
 
   <main className="container">
@@ -98,8 +25,8 @@ let make = () => {
         <Input
           onChange=handleChange
           onBlur=handleBlur
-          name=CurrentBalance
-          value={state.currBalance}
+          name=Form.CurrentBalance
+          value={formState.currBalance}
         />
       </Label>
       <Label>
@@ -107,8 +34,8 @@ let make = () => {
         <Input
           onChange=handleChange
           onBlur=handleBlur
-          name=Income
-          value={state.income}
+          name=Form.Income
+          value={formState.income}
         />
       </Label>
       <Label>
@@ -116,16 +43,16 @@ let make = () => {
         <Input
           onChange=handleChange
           onBlur=handleBlur
-          name=Spending
-          value={state.spending}
+          name=Form.Spending
+          value={formState.spending}
         />
       </Label>
       <Label>
         {"Savings rate" |> ReasonReact.string}
         <Input
           onChange=handleChange
-          name=SavingsRate
-          value={state.savingsRate}
+          name=Form.SavingsRate
+          value={formState.savingsRate}
         />
       </Label>
       <Label>
@@ -133,22 +60,25 @@ let make = () => {
         <Input
           onChange=handleChange
           onBlur=handleBlur
-          name=AnnualReturn
-          value={state.annualReturn}
+          name=Form.AnnualReturn
+          value={formState.annualReturn}
         />
       </Label>
       <button className="button is-primary">
         {"Calculate" |> ReasonReact.string}
       </button>
     </form>
-    {state.hasSubmitted === true
+    {formState.hasSubmitted === true
        ? <>
            <Result
-             targetAmount={state.targetAmount}
-             targetYear={state.targetYear}
-             savingsRate={state.savingsRate}
+             targetAmount={dataState.targetAmount}
+             targetYear={dataState.targetYear}
+             savingsRate={formState.savingsRate}
            />
-           <Table annualReturn={state.annualReturn} data={state.resultList} />
+           <Table
+             annualReturn={formState.annualReturn}
+             data={dataState.resultList}
+           />
          </>
        : ReasonReact.null}
   </main>;

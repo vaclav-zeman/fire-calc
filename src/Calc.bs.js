@@ -3,135 +3,35 @@
 
 var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
-var Caml_format = require("bs-platform/lib/js/caml_format.js");
 var Input$ReactHooksTemplate = require("./Input.bs.js");
 var Label$ReactHooksTemplate = require("./Label.bs.js");
 var Table$ReactHooksTemplate = require("./Table.bs.js");
 var Result$ReactHooksTemplate = require("./Result.bs.js");
-var Finance$ReactHooksTemplate = require("./Finance.bs.js");
-
-var initialState = /* record */[
-  /* annualReturn */"7",
-  /* resultList : [] */0,
-  /* currBalance */"0",
-  /* hasSubmitted */false,
-  /* income */"360000",
-  /* savingsRate */"66%",
-  /* spending */"120000",
-  /* targetAmount */0.0,
-  /* targetYear */undefined
-];
-
-function updateFormState(state, field, value) {
-  switch (field) {
-    case 0 : 
-        return /* record */[
-                /* annualReturn */value,
-                /* resultList */state[/* resultList */1],
-                /* currBalance */state[/* currBalance */2],
-                /* hasSubmitted */state[/* hasSubmitted */3],
-                /* income */state[/* income */4],
-                /* savingsRate */state[/* savingsRate */5],
-                /* spending */state[/* spending */6],
-                /* targetAmount */state[/* targetAmount */7],
-                /* targetYear */state[/* targetYear */8]
-              ];
-    case 1 : 
-        return /* record */[
-                /* annualReturn */state[/* annualReturn */0],
-                /* resultList */state[/* resultList */1],
-                /* currBalance */value,
-                /* hasSubmitted */state[/* hasSubmitted */3],
-                /* income */state[/* income */4],
-                /* savingsRate */state[/* savingsRate */5],
-                /* spending */state[/* spending */6],
-                /* targetAmount */state[/* targetAmount */7],
-                /* targetYear */state[/* targetYear */8]
-              ];
-    case 2 : 
-        return /* record */[
-                /* annualReturn */state[/* annualReturn */0],
-                /* resultList */state[/* resultList */1],
-                /* currBalance */state[/* currBalance */2],
-                /* hasSubmitted */state[/* hasSubmitted */3],
-                /* income */value,
-                /* savingsRate */state[/* savingsRate */5],
-                /* spending */state[/* spending */6],
-                /* targetAmount */state[/* targetAmount */7],
-                /* targetYear */state[/* targetYear */8]
-              ];
-    case 3 : 
-        return state;
-    case 4 : 
-        return /* record */[
-                /* annualReturn */state[/* annualReturn */0],
-                /* resultList */state[/* resultList */1],
-                /* currBalance */state[/* currBalance */2],
-                /* hasSubmitted */state[/* hasSubmitted */3],
-                /* income */state[/* income */4],
-                /* savingsRate */state[/* savingsRate */5],
-                /* spending */value,
-                /* targetAmount */state[/* targetAmount */7],
-                /* targetYear */state[/* targetYear */8]
-              ];
-    
-  }
-}
-
-function reducer(state, action) {
-  if (typeof action === "number") {
-    if (action !== 0) {
-      return /* record */[
-              /* annualReturn */state[/* annualReturn */0],
-              /* resultList */state[/* resultList */1],
-              /* currBalance */state[/* currBalance */2],
-              /* hasSubmitted */state[/* hasSubmitted */3],
-              /* income */state[/* income */4],
-              /* savingsRate */Finance$ReactHooksTemplate.savingsRate(Caml_format.caml_float_of_string(state[/* income */4]), Caml_format.caml_float_of_string(state[/* spending */6])).toString() + "%",
-              /* spending */state[/* spending */6],
-              /* targetAmount */state[/* targetAmount */7],
-              /* targetYear */state[/* targetYear */8]
-            ];
-    } else {
-      var yearlySavings = Finance$ReactHooksTemplate.savings(Caml_format.caml_float_of_string(state[/* income */4]), Caml_format.caml_float_of_string(state[/* spending */6]));
-      var resultList = Finance$ReactHooksTemplate.getResultList(Caml_format.caml_float_of_string(state[/* annualReturn */0]), Caml_format.caml_float_of_string(state[/* currBalance */2]), yearlySavings);
-      var targetAmount = Caml_format.caml_float_of_string(state[/* spending */6]) * 25.0;
-      var targetYear = Finance$ReactHooksTemplate.getFIREYear(resultList, targetAmount);
-      return /* record */[
-              /* annualReturn */state[/* annualReturn */0],
-              /* resultList */resultList,
-              /* currBalance */state[/* currBalance */2],
-              /* hasSubmitted */true,
-              /* income */state[/* income */4],
-              /* savingsRate */state[/* savingsRate */5],
-              /* spending */state[/* spending */6],
-              /* targetAmount */targetAmount,
-              /* targetYear */targetYear
-            ];
-    }
-  } else {
-    return updateFormState(state, action[0], action[1]);
-  }
-}
+var DataStore$ReactHooksTemplate = require("./DataStore.bs.js");
+var FormStore$ReactHooksTemplate = require("./FormStore.bs.js");
 
 function Calc(Props) {
-  var match = React.useReducer(reducer, initialState);
-  var dispatch = match[1];
-  var state = match[0];
+  var match = React.useReducer(DataStore$ReactHooksTemplate.Data[/* reducer */2], DataStore$ReactHooksTemplate.Data[/* initialState */0]);
+  var dispatchData = match[1];
+  var dataState = match[0];
+  var match$1 = React.useReducer(FormStore$ReactHooksTemplate.Form[/* reducer */2], FormStore$ReactHooksTemplate.Form[/* initialState */0]);
+  var dispatchForm = match$1[1];
+  var formState = match$1[0];
   var handleChange = function (name, value) {
-    return Curry._1(dispatch, /* InputChange */[
+    return Curry._1(dispatchForm, /* InputChange */[
                 name,
                 value
               ]);
   };
   var handleBlur = function (param, param$1) {
-    return Curry._1(dispatch, /* UpdateSavingsRate */1);
+    return Curry._1(dispatchForm, /* UpdateSavingsRate */1);
   };
   var handleSubmit = function (e) {
     e.preventDefault();
-    return Curry._1(dispatch, /* Submit */0);
+    Curry._1(dispatchForm, /* Submit */0);
+    return Curry._1(dispatchData, /* Calculate */[formState]);
   };
-  var match$1 = state[/* hasSubmitted */3] === true;
+  var match$2 = formState[/* hasSubmitted */5] === true;
   return React.createElement("main", {
               className: "container"
             }, React.createElement("form", {
@@ -145,53 +45,47 @@ function Calc(Props) {
                           onChange: handleChange,
                           onBlur: handleBlur,
                           name: /* CurrentBalance */1,
-                          value: state[/* currBalance */2]
+                          value: formState[/* currBalance */1]
                         })), React.createElement(Label$ReactHooksTemplate.make, {
                       children: null
                     }, "Annual Income", React.createElement(Input$ReactHooksTemplate.make, {
                           onChange: handleChange,
                           onBlur: handleBlur,
                           name: /* Income */2,
-                          value: state[/* income */4]
+                          value: formState[/* income */2]
                         })), React.createElement(Label$ReactHooksTemplate.make, {
                       children: null
                     }, "Annual Expenses", React.createElement(Input$ReactHooksTemplate.make, {
                           onChange: handleChange,
                           onBlur: handleBlur,
                           name: /* Spending */4,
-                          value: state[/* spending */6]
+                          value: formState[/* spending */3]
                         })), React.createElement(Label$ReactHooksTemplate.make, {
                       children: null
                     }, "Savings rate", React.createElement(Input$ReactHooksTemplate.make, {
                           onChange: handleChange,
                           name: /* SavingsRate */3,
-                          value: state[/* savingsRate */5]
+                          value: formState[/* savingsRate */4]
                         })), React.createElement(Label$ReactHooksTemplate.make, {
                       children: null
                     }, "Expected annual return (%)", React.createElement(Input$ReactHooksTemplate.make, {
                           onChange: handleChange,
                           onBlur: handleBlur,
                           name: /* AnnualReturn */0,
-                          value: state[/* annualReturn */0]
+                          value: formState[/* annualReturn */0]
                         })), React.createElement("button", {
                       className: "button is-primary"
-                    }, "Calculate")), match$1 ? React.createElement(React.Fragment, undefined, React.createElement(Result$ReactHooksTemplate.make, {
-                        targetYear: state[/* targetYear */8],
-                        targetAmount: state[/* targetAmount */7],
-                        savingsRate: state[/* savingsRate */5]
+                    }, "Calculate")), match$2 ? React.createElement(React.Fragment, undefined, React.createElement(Result$ReactHooksTemplate.make, {
+                        targetYear: dataState[/* targetYear */2],
+                        targetAmount: dataState[/* targetAmount */1],
+                        savingsRate: formState[/* savingsRate */4]
                       }), React.createElement(Table$ReactHooksTemplate.make, {
-                        annualReturn: state[/* annualReturn */0],
-                        data: state[/* resultList */1]
+                        annualReturn: formState[/* annualReturn */0],
+                        data: dataState[/* resultList */0]
                       })) : null);
 }
 
-var magicConstant = 25.0;
-
 var make = Calc;
 
-exports.initialState = initialState;
-exports.magicConstant = magicConstant;
-exports.updateFormState = updateFormState;
-exports.reducer = reducer;
 exports.make = make;
 /* react Not a pure module */

@@ -24,11 +24,13 @@ function Table(Props) {
                         }, "Change in net worth"), React.createElement("div", {
                           className: "column"
                         }, "ROI (" + (annualReturn + "%)"))), $$Array.of_list(List.map((function (param) {
+                            var year = param[/* year */0];
                             return React.createElement("div", {
+                                        key: String(year),
                                         className: "columns"
                                       }, React.createElement("div", {
                                             className: "column"
-                                          }, String(param[/* year */0])), React.createElement("div", {
+                                          }, String(year)), React.createElement("div", {
                                             className: "column"
                                           }, React.createElement(FormattedCurrency$ReactHooksTemplate.make, {
                                                 value: param[/* netWorth */1]
