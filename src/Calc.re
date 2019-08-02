@@ -19,7 +19,18 @@ let make = () => {
 
   <main className="container">
     <form className="section" onSubmit=handleSubmit>
-      <h1 className="title"> {"FIRE Calculator" |> ReasonReact.string} </h1>
+      <article className="content">
+        <h1 className="title has-text-centered">
+          {"FIRE Calculator - When can you retire early?" |> ReasonReact.string}
+        </h1>
+        <ul>
+          <li>
+            {"For terms shorter than 10 years, the regular savings makes the biggest impact on net worth."
+             |> ReasonReact.string}
+          </li>
+          <li> {"Currency is not important" |> ReasonReact.string} </li>
+        </ul>
+      </article>
       <Label>
         {"Currently Saved / Invested" |> ReasonReact.string}
         <Input
