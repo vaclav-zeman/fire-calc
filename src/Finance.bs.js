@@ -48,11 +48,11 @@ function getFIREYear(amounts, targetAmount) {
 }
 
 function getSavingsRate(income, spending) {
-  return Math.floor(spending / income * 100.0);
+  return Math.floor((income - spending) / income * 100.0);
 }
 
 function getSpendingBySavings(income, savingsRate) {
-  return Math.floor(income * savingsRate / 100.0);
+  return Math.floor(income - income * savingsRate / 100.0);
 }
 
 exports.getResultList = getResultList;
