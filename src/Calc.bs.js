@@ -15,9 +15,9 @@ var initialState = /* record */[
   /* resultList : [] */0,
   /* currBalance */"0",
   /* hasSubmitted */false,
-  /* income */"30000",
-  /* savingsRate */"67%",
-  /* spending */"10000",
+  /* income */"360000",
+  /* savingsRate */"66%",
+  /* spending */"120000",
   /* targetAmount */0.0,
   /* targetYear */undefined
 ];
@@ -93,9 +93,9 @@ function reducer(state, action) {
               /* targetYear */state[/* targetYear */8]
             ];
     } else {
-      var yearlySavings = Finance$ReactHooksTemplate.savings(Caml_format.caml_float_of_string(state[/* income */4]), Caml_format.caml_float_of_string(state[/* spending */6])) * 12.0;
+      var yearlySavings = Finance$ReactHooksTemplate.savings(Caml_format.caml_float_of_string(state[/* income */4]), Caml_format.caml_float_of_string(state[/* spending */6]));
       var resultList = Finance$ReactHooksTemplate.getResultList(Caml_format.caml_float_of_string(state[/* annualReturn */0]), Caml_format.caml_float_of_string(state[/* currBalance */2]), yearlySavings);
-      var targetAmount = Caml_format.caml_float_of_string(state[/* spending */6]) * 12.0 * 25.0;
+      var targetAmount = Caml_format.caml_float_of_string(state[/* spending */6]) * 25.0;
       var targetYear = Finance$ReactHooksTemplate.getFIREYear(resultList, targetAmount);
       return /* record */[
               /* annualReturn */state[/* annualReturn */0],
@@ -148,14 +148,14 @@ function Calc(Props) {
                           value: state[/* currBalance */2]
                         })), React.createElement(Label$ReactHooksTemplate.make, {
                       children: null
-                    }, "Income (monthly)", React.createElement(Input$ReactHooksTemplate.make, {
+                    }, "Annual Income", React.createElement(Input$ReactHooksTemplate.make, {
                           onChange: handleChange,
                           onBlur: handleBlur,
                           name: /* Income */2,
                           value: state[/* income */4]
                         })), React.createElement(Label$ReactHooksTemplate.make, {
                       children: null
-                    }, "Spending (monthly)", React.createElement(Input$ReactHooksTemplate.make, {
+                    }, "Annual Expenses", React.createElement(Input$ReactHooksTemplate.make, {
                           onChange: handleChange,
                           onBlur: handleBlur,
                           name: /* Spending */4,
@@ -185,9 +185,12 @@ function Calc(Props) {
                       })) : null);
 }
 
+var magicConstant = 25.0;
+
 var make = Calc;
 
 exports.initialState = initialState;
+exports.magicConstant = magicConstant;
 exports.updateFormState = updateFormState;
 exports.reducer = reducer;
 exports.make = make;

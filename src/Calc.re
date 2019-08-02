@@ -27,12 +27,15 @@ let initialState = {
   resultList: [],
   currBalance: "0",
   hasSubmitted: false,
-  income: "30000",
-  savingsRate: "67%",
-  spending: "10000",
+  income: "360000",
+  savingsRate: "66%",
+  spending: "120000",
   targetAmount: 0.0,
   targetYear: None,
 };
+
+// 25x of yearly expenses is considered save for retiring for ordinary person
+let magicConstant = 25.0;
 
 let updateFormState = (state: state, field: fields, value: string) =>
   switch (field) {
@@ -63,15 +66,14 @@ let reducer = (state, action) =>
       Finance.savings(
         ~income=float_of_string(state.income),
         ~spending=float_of_string(state.spending),
-      )
-      *. 12.0;
+      );
     let resultList: Finance.resultList =
       Finance.getResultList(
         ~rate=float_of_string(state.annualReturn),
         ~principal=float_of_string(state.currBalance),
         ~yearlySavings,
       );
-    let targetAmount = float_of_string(state.spending) *. 12.0 *. 25.0;
+    let targetAmount = float_of_string(state.spending) *. magicConstant;
     let targetYear = Finance.getFIREYear(~amounts=resultList, ~targetAmount);
 
     {...state, hasSubmitted: true, targetAmount, resultList, targetYear};
@@ -101,7 +103,7 @@ let make = () => {
         />
       </Label>
       <Label>
-        {"Income (monthly)" |> ReasonReact.string}
+        {"Annual Income" |> ReasonReact.string}
         <Input
           onChange=handleChange
           onBlur=handleBlur
@@ -110,7 +112,7 @@ let make = () => {
         />
       </Label>
       <Label>
-        {"Spending (monthly)" |> ReasonReact.string}
+        {"Annual Expenses" |> ReasonReact.string}
         <Input
           onChange=handleChange
           onBlur=handleBlur
