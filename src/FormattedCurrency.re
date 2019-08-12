@@ -1,5 +1,5 @@
 let format = [%bs.raw
-  {| new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format |}
+  {| new Intl.NumberFormat(undefined, { minimumFractionDigits: 2 }).format |}
 ];
 
 [@react.component]
