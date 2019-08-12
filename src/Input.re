@@ -5,11 +5,8 @@ let make = (~onChange, ~onBlur=?, ~name, ~value) =>
   <input
     className="input"
     onChange={e => getValue(e) |> onChange(name)}
-    onBlur={
-      switch (onBlur) {
-      | Some(onBlur) => onBlur(name)
-      | None => Js.log
-      }
-    }
+    type_="number"
+    min=0
+    required=true
     value
   />;

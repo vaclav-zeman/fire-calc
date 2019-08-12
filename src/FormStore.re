@@ -8,8 +8,7 @@ module Form = {
 
   type formAction =
     | InputChange(fields, string)
-    | Submit
-    | UpdateSavingsRate(fields);
+    | Submit;
 
   type state = {
     annualReturn: string,
@@ -41,28 +40,6 @@ module Form = {
   let reducer = (state, action) =>
     switch (action) {
     | InputChange(field, value) => updateFormState(state, field, value)
-    | UpdateSavingsRate(name) =>
-      if (name === SavingsRate) {
-        {
-          ...state,
-          spending:
-            Finance.getSpendingBySavings(
-              ~income=float_of_string(state.income),
-              ~savingsRate=float_of_string(state.savingsRate),
-            )
-            |> Js.Float.toString,
-        };
-      } else {
-        {
-          ...state,
-          savingsRate:
-            Finance.getSavingsRate(
-              ~income=float_of_string(state.income),
-              ~spending=float_of_string(state.spending),
-            )
-            |> Js.Float.toString,
-        };
-      }
     | Submit => {...state, hasSubmitted: true}
     };
 };

@@ -10,7 +10,6 @@ let make = () => {
 
   let handleChange = (name, value) =>
     Form.InputChange(name, value) |> dispatchForm;
-  let handleBlur = (name, _) => Form.UpdateSavingsRate(name) |> dispatchForm;
   let handleSubmit = e => {
     ReactEvent.Synthetic.preventDefault(e);
     dispatchForm(Form.Submit);
@@ -35,7 +34,6 @@ let make = () => {
         {"Currently Saved / Invested" |> ReasonReact.string}
         <Input
           onChange=handleChange
-          onBlur=handleBlur
           name=Form.CurrentBalance
           value={formState.currBalance}
         />
@@ -44,7 +42,6 @@ let make = () => {
         {"Annual Income" |> ReasonReact.string}
         <Input
           onChange=handleChange
-          onBlur=handleBlur
           name=Form.Income
           value={formState.income}
         />
@@ -53,25 +50,23 @@ let make = () => {
         {"Annual Expenses" |> ReasonReact.string}
         <Input
           onChange=handleChange
-          onBlur=handleBlur
           name=Form.Spending
           value={formState.spending}
         />
       </Label>
-      <Label>
-        {"Savings rate (%)" |> ReasonReact.string}
-        <Input
-          onChange=handleChange
-          name=Form.SavingsRate
-          onBlur=handleBlur
-          value={formState.savingsRate}
-        />
-      </Label>
+      // <Label>
+      //   {"Savings rate (%)" |> ReasonReact.string}
+      //   <Input
+      //     onChange=handleChange
+      //     name=Form.SavingsRate
+      //     onBlur=handleBlur
+      //     value={formState.savingsRate}
+      //   />
+      // </Label>
       <Label>
         {"Expected annual return (%)" |> ReasonReact.string}
         <Input
           onChange=handleChange
-          onBlur=handleBlur
           name=Form.AnnualReturn
           value={formState.annualReturn}
         />

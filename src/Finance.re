@@ -9,7 +9,7 @@ type resultList = list(resultRecord);
 
 let getResultList = (~rate, ~principal, ~yearlySavings) => {
   let numOfCompoundings = 1.0;
-  let numOfPeriods = 25;
+  let numOfPeriods = 30;
   let yearsArray: array(int) = Belt.Array.range(1, numOfPeriods);
 
   let calculate = (~prevValue) => {

@@ -6,7 +6,7 @@ var $$Array = require("bs-platform/lib/js/array.js");
 var Belt_Array = require("bs-platform/lib/js/belt_Array.js");
 
 function getResultList(rate, principal, yearlySavings) {
-  var yearsArray = Belt_Array.range(1, 25);
+  var yearsArray = Belt_Array.range(1, 30);
   var calculate = function (prevValue) {
     return Math.round((prevValue + yearlySavings) * (1.0 + rate / 100.0 / 1.0));
   };
