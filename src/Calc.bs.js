@@ -38,7 +38,7 @@ function Calc(Props) {
                       className: "content"
                     }, React.createElement("h1", {
                           className: "title has-text-centered"
-                        }, "FIRE Calculator - When can you retire early?"), React.createElement("ul", undefined, React.createElement("li", undefined, "For terms shorter than 10 years, the regular savings makes the biggest impact on net worth."), React.createElement("li", undefined, "Currency is not important"))), React.createElement(Label$ReactHooksTemplate.make, {
+                        }, "FIRE Calculator - When can you retire early?"), React.createElement("p", undefined, "For the first 10 years, the regular savings make the biggest impact on net worth."), "Currency is irrelevant."), React.createElement(Label$ReactHooksTemplate.make, {
                       children: null
                     }, "Currently Saved / Invested", React.createElement(Input$ReactHooksTemplate.make, {
                           onChange: handleChange,

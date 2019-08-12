@@ -1,6 +1,4 @@
-let format = [%bs.raw
-  {| new Intl.NumberFormat(undefined, { minimumFractionDigits: 2 }).format |}
-];
+let format = [%bs.raw {| new Intl.NumberFormat(undefined).format |}];
 
 [@react.component]
 let make = (~value) => <> {format(value)} </>;

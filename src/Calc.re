@@ -22,13 +22,11 @@ let make = () => {
         <h1 className="title has-text-centered">
           {"FIRE Calculator - When can you retire early?" |> ReasonReact.string}
         </h1>
-        <ul>
-          <li>
-            {"For terms shorter than 10 years, the regular savings makes the biggest impact on net worth."
-             |> ReasonReact.string}
-          </li>
-          <li> {"Currency is not important" |> ReasonReact.string} </li>
-        </ul>
+        <p>
+          {"For the first 10 years, the regular savings make the biggest impact on net worth."
+           |> ReasonReact.string}
+        </p>
+        {"Currency is irrelevant." |> ReasonReact.string}
       </article>
       <Label>
         {"Currently Saved / Invested" |> ReasonReact.string}

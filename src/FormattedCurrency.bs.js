@@ -4,7 +4,7 @@
 var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
 
-var format = ( new Intl.NumberFormat(undefined, { minimumFractionDigits: 2 }).format );
+var format = ( new Intl.NumberFormat(undefined).format );
 
 function FormattedCurrency(Props) {
   var value = Props.value;
